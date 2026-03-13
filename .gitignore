@@ -1,0 +1,59 @@
+# ===============================
+# Python cache files
+# ===============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ===============================
+# Virtual Environment
+# ===============================
+venv
+
+# ===============================
+# Dataset files
+# ===============================
+data/raw/*.csv
+data/processed/*.csv
+*.csv
+
+#track this csv file specifically
+!data/raw/small_scale_triage_dataset.csv 
+data/raw/million_triage_dataset.csv
+
+# ===============================
+# Model artifacts
+# ===============================
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+
+# ===============================
+# Jupyter notebook checkpoints
+# ===============================
+.ipynb_checkpoints/
+
+# ===============================
+# OS generated files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# IDE files
+# ===============================
+.vscode/
+.idea/
+
+# ===============================
+# Logs
+# ===============================
+*.log
+
+# ===============================
+# Temporary files
+# ===============================
+*.tmp
+*.temp
