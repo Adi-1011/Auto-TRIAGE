@@ -39,3 +39,9 @@ print("\nAccuracy Score\n", accuracy_score(y_test,y_pred)*100)
 print("\nClassification report\n", classification_report(y_test,y_pred))
 print(f"Time taken: {(end_boosting - start_boosting)} seconds")
 print(f"Time taken: {(end_boosting - start_boosting) / 60:.2f} minutes")
+
+import joblib
+joblib.dump(boost, "models/saved/xgb/xgb_model.pkl")
+joblib.dump(le, "models/saved/xgb/label_encoder.pkl")
+
+print("XGB model saved succesfully")

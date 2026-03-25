@@ -74,12 +74,16 @@ plot_tree(
     max_depth=3               # limit depth for readability
 )
 plt.title("Single Tree from Random Forest (Tree 0)")
-plt.savefig("results/RF_Training_Results/sample_1m_entropy/rf_single_tree.png", dpi=150, bbox_inches='tight')
+# plt.savefig("results/RF_Training_Results/sample_1m_entropy/rf_single_tree.png", dpi=150, bbox_inches='tight')
 importances = clf_entropy.feature_importances_
 plt.figure(figsize=(10, 6))
 plt.barh(X.columns, importances, color='steelblue', edgecolor='black')
 plt.xlabel("Importance Score")
 plt.title("Feature Importance — Random Forest")
 plt.tight_layout()
-plt.savefig("results/RF_Training_Results/sample_1m/rf_feature_importance.png", dpi=150, bbox_inches='tight')
+# plt.savefig("results/RF_Training_Results/sample_1m/rf_feature_importance.png", dpi=150, bbox_inches='tight')
 plt.show()
+
+# import joblib
+# #saving the saved model 
+# joblib.dump(m,)
