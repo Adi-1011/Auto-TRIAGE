@@ -7,7 +7,7 @@ import os
 
 gem3 = "gemini-3-flash-preview"
 client = genai.Client(api_key=os.getenv("GEMENI_API_KEY"))
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # --------setting up fast api input request------------
 def feature_extract_from_text(query: str):
     query += """
@@ -24,7 +24,7 @@ def feature_extract_from_text(query: str):
         "comorbidty": <0 or 1>
     }
     """
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    
     img_path = os.path.join(BASE_DIR, "../../data/Images/condition_1.jpg")
     file = client.files.upload(file=img_path)
     response = client.models.generate_content(
@@ -40,7 +40,6 @@ def feature_extract_from_text(query: str):
     features_json = json.loads(raw)
     return features_json
 
-# querry = input("type your querry here")
 model_path = os.path.join(BASE_DIR, "../../models/saved/xgb/xgb_model.pkl")
 le_path = os.path.join(BASE_DIR, "../../models/saved/xgb/label_encoder.pkl")
 model = joblib.load(model_path)
