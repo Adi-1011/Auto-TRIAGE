@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from llm.feature_extract import classify_patient, feature_extract_from_text
+from backend.llm.feature_extract import classify_patient, feature_extract_from_text
 from fastapi.middleware.cors import CORSMiddleware
 
 
