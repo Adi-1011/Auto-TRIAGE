@@ -1,0 +1,64 @@
+body {
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(135deg, #290027, #1a1a1a);
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+/* Card */
+.module {
+    width: 400px;
+    padding: 20px;
+
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1a0012, #2b0020);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Textarea */
+textarea {
+    width: 100rw;
+    height: 100px;
+    font-size: 20px;
+    background: #111;
+    color: white;
+
+    border: 1px solid #333;
+    border-radius: 8px;
+
+    padding: 10px;
+    resize: none;
+}
+
+/* Button */
+button {
+    padding: 10px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #ff2a7f;
+    color: white;
+
+    cursor: pointer;
+}
+
+/* Output */
+pre {
+    background: #111;
+    padding: 10px;
+    border-radius: 8px;
+
+    border: 1px solid #333;
+}
