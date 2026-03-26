@@ -24,8 +24,7 @@ data/raw/million_triage_dataset.csv
 # ===============================
 # Model artifacts
 # ===============================
-*.pkl
-*.joblib
+
 *.h5
 *.pt
 *.pth
@@ -57,3 +56,4 @@ Thumbs.db
 # ===============================
 *.tmp
 *.temp
+*idea_notes.txt
