@@ -7,22 +7,22 @@ import time
 from tqdm import tqdm
 
 start = time.time()
-df = pd.read_csv("data/raw/triage_dataset_200k.csv")
+df = pd.read_csv("data/new_data3/triage_dataset_100k.csv")
 
-X = df.drop('triage_class', axis=1)
-y = df['triage_class']
+X = df.drop(['class','phenotype'], axis=1)
+y = df['class']
 
 le = LabelEncoder()
 y = le.fit_transform(y)
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 
-mlp = MLPClassifier(hidden_layer_sizes=(128, 64, 32), max_iter=300, tol= 0.0000001, n_iter_no_change=50, learning_rate= 'adaptive', random_state=42, verbose=True)
+mlp = MLPClassifier(hidden_layer_sizes=(128, 64, 32), max_iter=200, tol= 0.0000001, n_iter_no_change=50, learning_rate= 'adaptive', random_state=42, verbose=True)
 mlp.fit(X_train, Y_train)
 
 print(f"Stopped at epoch: {mlp.n_iter_}")

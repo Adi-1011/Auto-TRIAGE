@@ -13,7 +13,7 @@ def plot_decision_tree(clf_object, feature_names, class_names):
     plot_tree(clf_object, filled=True, feature_names=feature_names, class_names=class_names, rounded=True)
     plt.show()
 
-dataset = "data/raw/triage_dataset_1m.csv"
+dataset = "data/new_data3/triage_dataset_1m.csv"
 
 df = pd.read_csv(dataset)
 #printing data
@@ -21,8 +21,8 @@ print("dataset length:",len(df))
 print("data shape:",df.shape)
 print("Dataset head:\n",df.head())
 # train test split
-X = df.drop('triage_class', axis = 1)
-Y = df['triage_class']
+X = df.drop(['class','phenotype'], axis = 1)
+Y = df['class']
 le = LabelEncoder()
 Y = le.fit_transform(Y)
 x_train, x_test, y_train, y_test = train_test_split(X,Y,test_size=0.2,random_state=42)

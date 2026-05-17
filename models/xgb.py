@@ -7,17 +7,18 @@ import xgboost as xgb
 from sklearn import metrics
 import time
 
-dataset = "data/raw/triage_dataset_1m.csv"
+dataset = "data/new_data3/triage_dataset_1m.csv"
 
 df = pd.read_csv(dataset)
 
-X = df.drop('triage_class', axis=1)
-Y = df['triage_class']
+X = df.drop(['class','phenotype'], axis=1)
+print(X.columns.tolist())
+Y = df['class']
 
 le = LabelEncoder()
 Y = le.fit_transform(Y)
 
-x_train, x_test, y_train, y_test = train_test_split(X,Y, test_size=0.2, random_state=42)
+x_train, x_test, y_train, y_test = train_test_split(X,Y, test_size=0.2, random_state=42, stratify=Y)
 
 #training the model
 start_boosting = time.time()
@@ -41,7 +42,7 @@ print(f"Time taken: {(end_boosting - start_boosting)} seconds")
 print(f"Time taken: {(end_boosting - start_boosting) / 60:.2f} minutes")
 
 import joblib
-joblib.dump(boost, "models/saved/xgb/xgb_model.pkl")
-joblib.dump(le, "models/saved/xgb/label_encoder.pkl")
+joblib.dump(boost, "models/saved3/xgb/xgb_model.pkl")
+joblib.dump(le, "models/saved3/xgb/label_encoder.pkl")
 
 print("XGB model saved succesfully")

@@ -6,17 +6,17 @@ from sklearn import metrics
 import pandas as pd
 
 # change this to switch between datasets
-DATASET = "data/raw/million_triage_dataset.csv" 
+DATASET = "data/new_data3/triage_dataset_1m.csv" 
 
 df = pd.read_csv(DATASET)
 
-X = df.drop('triage_class', axis=1)
-y = df['triage_class']
+X = df.drop(['class','phenotype'], axis=1)
+y = df['class']
 
 le = LabelEncoder()
 y = le.fit_transform(y)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42,stratify=y)
 
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
