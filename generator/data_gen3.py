@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import random
 
-# =========================================================
+
 # CLASS DISTRIBUTION
-# =========================================================
+
 
 class_dist = {
     "non_urgent": 0.55,
@@ -12,9 +12,9 @@ class_dist = {
     "emergency": 0.15
 }
 
-# =========================================================
+
 # PATIENT PHENOTYPES
-# =========================================================
+
 
 phenotype_config = {
 
@@ -43,10 +43,9 @@ phenotype_config = {
     }
 }
 
-# =========================================================
 # FEATURE CONFIG
 # (mean, std, min_clip, max_clip)
-# =========================================================
+
 
 feature_config = {
 
@@ -183,9 +182,9 @@ feature_config = {
     }
 }
 
-# =========================================================
+
 # TEMPORAL CONFIG
-# =========================================================
+
 
 temporal_config = {
 
@@ -220,9 +219,9 @@ temporal_config = {
     }
 }
 
-# =========================================================
+
 # UTILITY FUNCTIONS
-# =========================================================
+
 
 def sample_class():
 
@@ -270,9 +269,9 @@ def generate_delta_feature(params, current_value=None, feature_name=None):
 
     mean, std, min_clip, max_clip = params
 
-    # =====================================================
+
     # SOFT COUPLING LOGIC
-    # =====================================================
+
 
     coupling_strength = np.random.uniform(0.3, 1.2)
 
@@ -299,9 +298,9 @@ def generate_delta_feature(params, current_value=None, feature_name=None):
         if current_value < 85:
             mean -= (6 * coupling_strength)
 
-    # =====================================================
+
     # STOCHASTIC DELTA GENERATION
-    # =====================================================
+
 
     delta = np.random.normal(mean, std)
 
@@ -342,34 +341,34 @@ def generate_crp(class_label):
     return round(np.random.exponential(scale), 2)
 
 
-# =========================================================
+
 # PATIENT GENERATOR
-# =========================================================
+
 
 
 def generate_patient():
 
     patient = {}
 
-    # =====================================================
+
     # SAMPLE CLASS
-    # =====================================================
+
 
     class_label = sample_class()
 
     patient["class"] = class_label
 
-    # =====================================================
+
     # SAMPLE PHENOTYPE
-    # =====================================================
+
 
     phenotype = sample_phenotype(class_label)
 
     patient["phenotype"] = phenotype
 
-    # =====================================================
+
     # GENERATE CURRENT FEATURES
-    # =====================================================
+
 
     for feature in feature_config[phenotype]:
 
@@ -379,9 +378,9 @@ def generate_patient():
 
         patient[feature] = value
 
-    # =====================================================
+
     # GENERATE TEMPORAL FEATURES
-    # =====================================================
+
 
     for del_feature in temporal_config:
 
@@ -399,17 +398,17 @@ def generate_patient():
 
         patient[del_feature] = delta_value
 
-    # =====================================================
+  
     # COMORBIDITY + CRP
-    # =====================================================
+
 
     patient["comorbidity"] = generate_comorbidity(class_label)
 
     patient["crp"] = generate_crp(class_label)
 
-    # =====================================================
+
     # OCCASIONAL BORDERLINE LABEL NOISE
-    # =====================================================
+
 
     noise_probability = np.random.rand()
 
@@ -422,9 +421,9 @@ def generate_patient():
     return patient
 
 
-# =========================================================
+
 # DATASET GENERATION
-# =========================================================
+
 
 NUM_SAMPLES = 1000000
 
