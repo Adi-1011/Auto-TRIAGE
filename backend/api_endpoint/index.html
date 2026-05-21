@@ -10,32 +10,63 @@
 <div class="module">
 <h2>Describe your health issues</h2>
 <textarea id="inputText" rows="5" cols="50" placeholder="Enter symptoms..."></textarea>
-<br><br>
+<label for="imageInput">Upload supporting image</label>
+<input id="imageInput" type="file" accept="image/*">
 <button onclick="predict()">Predict</button>
 <h3>RESULTS:</h3>
 <pre id="output"></pre>
 </div>
 <script>
+const API_URL = (
+    window.location.protocol === "file:" ||
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+) ? "http://127.0.0.1:8000/predict" : "https://auto-triage-1.onrender.com/predict";
+
+function readImageAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+        if (!file) {
+            resolve(null);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+}
+
 async function predict() {
     const text = document.getElementById("inputText").value;
+    const imageFile = document.getElementById("imageInput").files[0];
 
     document.getElementById("output").innerText = "Loading...";
 
     try {
+        const imageBase64 = await readImageAsDataUrl(imageFile);
+
         console.log("Calling API...");
-        const res = await fetch("https://auto-triage-1.onrender.com/predict", {
+        const res = await fetch(API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ text: text })
+            body: JSON.stringify({
+                text: text,
+                image_base64: imageBase64
+            })
         });
 
         const data = await res.json();
 
+        if (!res.ok) {
+            throw new Error(JSON.stringify(data));
+        }
+
         document.getElementById("output").innerText =
             "Prediction: " + data.prediction + "\n\n" +
-            "Symptoms:\n" + JSON.stringify(data.features, null, 2);
+            "Extracted features:\n" + JSON.stringify(data.features, null, 2);
 
     } catch (err) {
         document.getElementById("output").innerText = "Error: " + err;

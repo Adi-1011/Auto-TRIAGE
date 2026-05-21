@@ -5,7 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 class queryInput(BaseModel):
-    text:str
+    text: str
+    image_base64: str | None = None
 
 app = FastAPI()
 app.add_middleware(
@@ -17,7 +18,7 @@ app.add_middleware(
 )
 @app.post('/predict')
 def predict(data: queryInput):
-    features = feature_extract_from_text(data.text)
+    features = feature_extract_from_text(data.text, data.image_base64)
     result = classify_patient(features)
     return {
         "features": features,
