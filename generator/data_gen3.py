@@ -2,10 +2,6 @@ import numpy as np
 import pandas as pd
 import random
 
-
-# CLASS DISTRIBUTION
-
-
 class_dist = {
     "non_urgent": 0.55,
     "urgent": 0.30,
@@ -220,9 +216,6 @@ temporal_config = {
 }
 
 
-# UTILITY FUNCTIONS
-
-
 def sample_class():
 
     labels = list(class_dist.keys())
@@ -251,7 +244,6 @@ def generate_static_feature(params, feature_name=None):
 
     value = np.clip(value, min_clip, max_clip)
 
-    # additional random noise
     noise = np.random.normal(0, std * 0.15)
 
     value += noise
@@ -268,9 +260,6 @@ def generate_static_feature(params, feature_name=None):
 def generate_delta_feature(params, current_value=None, feature_name=None):
 
     mean, std, min_clip, max_clip = params
-
-
-    # SOFT COUPLING LOGIC
 
 
     coupling_strength = np.random.uniform(0.3, 1.2)
@@ -299,12 +288,8 @@ def generate_delta_feature(params, current_value=None, feature_name=None):
             mean -= (6 * coupling_strength)
 
 
-    # STOCHASTIC DELTA GENERATION
-
-
     delta = np.random.normal(mean, std)
 
-    # occasional contradictory behavior
     if np.random.rand() < 0.08:
         delta *= -1
 
@@ -342,16 +327,9 @@ def generate_crp(class_label):
 
 
 
-# PATIENT GENERATOR
-
-
-
 def generate_patient():
 
     patient = {}
-
-
-    # SAMPLE CLASS
 
 
     class_label = sample_class()
@@ -359,15 +337,11 @@ def generate_patient():
     patient["class"] = class_label
 
 
-    # SAMPLE PHENOTYPE
-
 
     phenotype = sample_phenotype(class_label)
 
     patient["phenotype"] = phenotype
 
-
-    # GENERATE CURRENT FEATURES
 
 
     for feature in feature_config[phenotype]:
@@ -377,9 +351,6 @@ def generate_patient():
         value = generate_static_feature(params, feature)
 
         patient[feature] = value
-
-
-    # GENERATE TEMPORAL FEATURES
 
 
     for del_feature in temporal_config:
@@ -398,16 +369,10 @@ def generate_patient():
 
         patient[del_feature] = delta_value
 
-  
-    # COMORBIDITY + CRP
-
 
     patient["comorbidity"] = generate_comorbidity(class_label)
 
     patient["crp"] = generate_crp(class_label)
-
-
-    # OCCASIONAL BORDERLINE LABEL NOISE
 
 
     noise_probability = np.random.rand()
@@ -420,9 +385,6 @@ def generate_patient():
 
     return patient
 
-
-
-# DATASET GENERATION
 
 
 NUM_SAMPLES = 1000000

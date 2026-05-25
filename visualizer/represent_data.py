@@ -1,47 +1,58 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 
-df = pd.read_csv("data/raw/small_scale_triage_dataset.csv")
+# Load dataset
+df = pd.read_csv("data/new_data3/triage_dataset_1m.csv")
 
-features = ["age", "heart_rate", "respiratory_rate", "systolic_bp", 
-            "spo2", "temprature", "wbc", "crp", "comorbidty"]
+# Features to visualize
+features = [
+    "age",
+    "hr",
+    "rr",
+    "systolic_bp",
+    "spo2",
+    "temp",
+    "wbc_count",
+    "crp",
+    "delta_hr",
+    "delta_rr",
+    "delta_spo2",
+    "delta_systolic_bp",
+    "delta_temp"
+]
 
-# Step 1 - Basic info
-print(df.shape)
-print(df.head())
-print(df["triage_class"].value_counts())
 
-# Step 2 - Feature distributions
-for feature in features:
-    plt.figure()
-    plt.hist(df[feature], bins=30, color="steelblue", edgecolor="black")
-    plt.title(f"Distribution of {feature}")
-    plt.xlabel(feature)
-    plt.ylabel("Frequency")
-    plt.savefig(f"data/processed/{feature}_distribution.png")
-    plt.show()
-    plt.close()
+scaler = StandardScaler()
+scaled_data = scaler.fit_transform(df[features])
 
-# Step 3 - Triage class distribution
-plt.figure()
-df["triage_class"].value_counts().plot(kind="bar", color="steelblue", edgecolor="black")
-plt.title("Triage Class Distribution")
-plt.xlabel("Class")
-plt.ylabel("Count")
-plt.savefig("data/processed/triage_class_distribution.png")
+scaled_df = pd.DataFrame(scaled_data, columns=features)
+scaled_df["class"] = df["class"]
+
+
+plt.figure(figsize=(16, 8))
+
+
+melted = scaled_df.melt(
+    id_vars="class",
+    var_name="Feature",
+    value_name="Scaled Value"
+)
+
+# Boxplot grouped by feature and class
+import seaborn as sns
+
+sns.boxplot(
+    data=melted,
+    x="Feature",
+    y="Scaled Value",
+    hue="class"
+)
+
+plt.xticks(rotation=45)
+plt.title("Feature Distribution Across Triage Classes")
+plt.tight_layout()
+
+plt.savefig("data/processed2/combined_feature_boxplot.png", dpi=300)
+
 plt.show()
-plt.close()
-
-# Step 4 - Box plots grouped by triage class
-for feature in features:
-    plt.figure()
-    df.boxplot(column=feature, by="triage_class")
-    plt.title(f"{feature} by Triage Class")
-    plt.suptitle("")
-    plt.xlabel("Triage Class")
-    plt.ylabel(feature)
-    plt.savefig(f"data/processed/{feature}_boxplot.png")
-    plt.show()
-    plt.close()
-
-print("All plots saved to data/processed/")
