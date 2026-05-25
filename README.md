@@ -9,16 +9,18 @@ The project was developed as part of a Final Year Research Project (FYRP) at
 
 ## Overview
 
-Access to real clinical triage datasets is heavily restricted due to privacy and ethical concerns. This project explores whether a carefully designed synthetic dataset can still support meaningful experimentation for emergency triage classification.
+Emergency triage systems often depend on fast and reliable prioritization of patients based on physiological severity. Access to real hospital triage datasets, however, is heavily restricted due to privacy and ethical concerns.
 
-Instead of relying on purely random data generation, the framework attempts to simulate clinically plausible patient behavior using:
-- class-conditional probabilistic modeling,
-- physiological constraints,
-- temporal deterioration patterns,
-- controlled overlap between severity classes,
-- and phenotype-based variability.
+This project explores whether a carefully structured synthetic dataset can still support meaningful experimentation for triage classification.
 
-The goal was not to create a production medical system, but to study how different supervised machine learning models behave under progressively more realistic triage conditions.
+Instead of purely random data generation, the framework introduces:
+- probabilistic clinical simulation,
+- temporal deterioration modeling,
+- controlled physiological overlap,
+- phenotype diversity,
+- and progression-aware feature engineering.
+
+The primary goal was to evaluate how different supervised machine learning models behave under increasingly realistic triage conditions while maintaining clinically plausible distributions.
 
 ---
 
@@ -49,25 +51,25 @@ Comparative Evaluation
 | Class | Description |
 |---|---|
 | Non-Urgent | Stable physiological condition |
-| Urgent | Moderate instability requiring clinical attention |
+| Urgent | Moderate instability requiring medical attention |
 | Emergency | Critical condition requiring immediate intervention |
 
 ---
 
 ## Dataset Design
 
-The dataset used in this project is fully synthetic and generated using probabilistic distributions instead of real patient records.
+The dataset used in this project is fully synthetic and generated using clinically constrained probabilistic distributions instead of real patient records.
 
-The final dataset includes:
+The final dataset incorporates:
 - static physiological features,
-- temporal progression features,
-- controlled clinical ambiguity,
-- overlap between neighboring severity classes,
-- and phenotype diversity to reduce unrealistic separability.
+- temporal delta features,
+- controlled class overlap,
+- ambiguity injection,
+- and phenotype-based variability.
 
-### Physiological Features
+The framework was gradually refined across multiple dataset iterations to reduce unrealistic class separability and improve generalization behavior.
 
-#### Static Features
+### Static Features
 - Age
 - Heart Rate
 - Respiratory Rate
@@ -78,7 +80,7 @@ The final dataset includes:
 - CRP Level
 - Comorbidity Indicator
 
-#### Temporal Features
+### Temporal Features
 - ΔHR
 - ΔRR
 - ΔSpO₂
@@ -109,7 +111,7 @@ All models were trained and evaluated using stratified 5-fold cross-validation u
 | MLP | 95.45% | 86.10% |
 | XGBoost | **95.80%** | **85.82%** |
 
-XGBoost achieved the best overall balance between classification performance and computational efficiency.
+XGBoost achieved the best overall balance between predictive performance and computational efficiency.
 
 ---
 
@@ -118,24 +120,58 @@ XGBoost achieved the best overall balance between classification performance and
 ```text
 Auto-TRIAGE/
 │
+├── backend/
+│   ├── api_endpoint/
+│   │   ├── main.py
+│   │   ├── index.html
+│   │   └── style.css
+│   │
+│   └── llm/
+│       ├── feature_extract.py
+│       └── condition_1.jpg
+│
 ├── data/
 │   ├── raw/
-│   └── processed/
+│   ├── processed2/
+│   └── Images/
+│
+├── evaluation/
+│   ├── 1m/
+│   │   ├── Dataset Workflow.png
+│   │   ├── Proposed System Architecture.png
+│   │   └── Temporal Deterioration Modeling.png
+│   │
+│   └── cross_validation.py
 │
 ├── generator/
-│   └── synthetic_data_gen.py
+│   ├── synthetic_data_gen.py
+│   ├── data_gen2.py
+│   └── data_gen3.py
 │
 ├── models/
-│   ├── logistic_regression/
-│   ├── random_forest/
-│   ├── mlp/
-│   └── xgboost/
+│   ├── logistic_reg.py
+│   ├── random_forest.py
+│   ├── mlpclassifier.py
+│   ├── xgb.py
+│   │
+│   ├── saved/
+│   ├── saved2/
+│   └── saved3/
+│
+├── results/
+├── results3/
+├── new_results/
 │
 ├── visualizer/
-│   └── visualize.py
+│   └── represent_data.py
+│
+├── working_models/
+│   ├── runxgb.py
+│   └── run_xgb_pred.bat
 │
 ├── manuscript/
 │
+├── api_test.py
 ├── requirements.txt
 └── README.md
 ```
@@ -179,7 +215,7 @@ pip install -r requirements.txt
 
 ## Running the Project
 
-### Generate Dataset
+### Generate Synthetic Dataset
 
 ```bash
 python generator/synthetic_data_gen.py
@@ -188,12 +224,38 @@ python generator/synthetic_data_gen.py
 ### Run Visualizations
 
 ```bash
-python visualizer/visualize.py
+python visualizer/represent_data.py
 ```
 
 ### Train Models
 
-Run the corresponding training scripts from the model directories.
+Example:
+
+```bash
+python models/xgb.py
+```
+
+Other model scripts can be executed similarly.
+
+---
+
+## Testing Saved Models
+
+The repository also includes a lightweight testing setup for running trained XGBoost models with demo input data.
+
+### Python Inference Script
+
+```bash
+python working_models/runxgb.py
+```
+
+### Windows Batch Script
+
+```bash
+run_xgb_pred.bat
+```
+
+This loads the saved model and performs prediction on sample patient input data.
 
 ---
 
