@@ -35,6 +35,8 @@ def export_html_report(results, filename="triage_report.html"):
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(html_template)
     print(f"\nHTML Report exported successfully: {filepath}")
+    import webbrowser
+    webbrowser.open(filepath)
 
 def main():
     # Load model, demodata etc...
